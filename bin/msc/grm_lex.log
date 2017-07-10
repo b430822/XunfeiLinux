@@ -94,3 +94,35 @@ Time  2017/07/10 15:45:45 737
 [2017/07/10 15:45:45 738] grm_lex    174  grammar_list  :  call  
 [2017/07/10 15:45:45 739] grm_lex    260  ISR_MSG_UPDATELEXICON ret =  0  
 [2017/07/10 15:45:45 748] grm_lex    71   0  call  
+============================================================
+Time  2017/07/10 16:27:09 501 
+============================================================
+[2017/07/10 16:27:09 501] grm_lex    264  SYS_MSG_LOAD  
+[2017/07/10 16:27:09 501] grm_lex    281  SYS_MSG_REGCB  
+[2017/07/10 16:27:09 501] grm_lex    267  SYS_MSG_UNLOAD  
+[2017/07/10 16:27:09 501] grm_lex    281  SYS_MSG_REGCB  
+[2017/07/10 16:27:09 501] grm_lex    251  ISR_MSG_BUILDGRAMMAR  
+[2017/07/10 16:27:09 501] grm_lex    100  grm_type :  bnf  
+[2017/07/10 16:27:09 501] grm_lex    106  engine_type  :  local  
+[2017/07/10 16:27:09 501] grm_lex    106  asr_res_path  :  fo|res/asr/common.jet  
+[2017/07/10 16:27:09 501] grm_lex    106  sample_rate  :  16000  
+[2017/07/10 16:27:09 501] grm_lex    106  grm_build_path  :  res/asr/GrmBuilld  
+[2017/07/10 16:27:09 502] grm_lex    254  ISR_MSG_BUILDGRAMMAR ret =  0  
+[2017/07/10 16:27:09 509] grm_lex    71   0  call  
+============================================================
+Time  2017/07/10 16:27:16 073 
+============================================================
+[2017/07/10 16:27:16 073] grm_lex    264  SYS_MSG_LOAD  
+[2017/07/10 16:27:16 073] grm_lex    281  SYS_MSG_REGCB  
+[2017/07/10 16:27:16 074] grm_lex    267  SYS_MSG_UNLOAD  
+[2017/07/10 16:27:16 074] grm_lex    281  SYS_MSG_REGCB  
+[2017/07/10 16:27:16 074] grm_lex    257  ISR_MSG_UPDATELEXICON  
+[2017/07/10 16:27:16 074] grm_lex    168  contact  16  
+[2017/07/10 16:27:16 074] grm_lex    174  engine_type  :  local  
+[2017/07/10 16:27:16 074] grm_lex    174  text_encoding  :  UTF-8  
+[2017/07/10 16:27:16 074] grm_lex    174  asr_res_path  :  fo|res/asr/common.jet  
+[2017/07/10 16:27:16 074] grm_lex    174  sample_rate  :  16000  
+[2017/07/10 16:27:16 074] grm_lex    174  grm_build_path  :  res/asr/GrmBuilld  
+[2017/07/10 16:27:16 074] grm_lex    174  grammar_list  :  call  
+[2017/07/10 16:27:16 074] grm_lex    260  ISR_MSG_UPDATELEXICON ret =  0  
+[2017/07/10 16:27:16 080] grm_lex    71   0  call  

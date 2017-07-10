@@ -1,125 +1,145 @@
 ============================================================
-Time  2017/07/07 09:37:16 274 
+Time  2017/07/10 16:27:01 586 
 ============================================================
-[2017/07/07 09:37:16 274] ivw_local  1194 os_type is:  Linux  
-[2017/07/07 09:37:16 274] ivw_local  1203 ivw loaded!  
-[2017/07/07 09:37:16 274] ivw_local  1205 5.0.1016  
-[2017/07/07 09:37:16 274] ivw_local  1183 SYS_MSG_REGCB  msp_status_cb  func(8806c680) 
-[2017/07/07 09:37:16 276] ivw_local  971  IVW_LOCAL_MSG_INIT  
-[2017/07/07 09:37:16 276] ivw_local  694  init :  appid = 595c9d5c,engine_start = ivw,ivw_res_path =fo|res/ivw/wakeupresource.jet, work_dir = .  
-[2017/07/07 09:37:16 276] ivw_local  704  ivw_res_path:  fo|res/ivw/wakeupresource.jet  
-[2017/07/07 09:37:16 276] ivw_local  655  lgi:  nil  nil  
-[2017/07/07 09:37:16 276] ivw_local  659  fo|res/ivw/wakeupresource.jet  1  
-[2017/07/07 09:37:16 276] ivw_local  452  err  0  
-[2017/07/07 09:37:16 276] ivw_local  453  res_ver  3  
-[2017/07/07 09:37:16 276] ivw_local  454  res_appid_md5    
-[2017/07/07 09:37:16 276] ivw_local  455  res_id    
-[2017/07/07 09:37:16 276] ivw_local  456  |%fsoniah%=|%fwwnc%=%2>2d>c2d%+%ubtnc%=%?55f1d3?01101c7e33d>6ad4a513b7ca%+%ubts~wb%=%c%z+%nqpphuc%=|%irj%=6+%phuct%=\|%nc%=7+%sbs%=%Ô∏â‚©π·õΩ‚ûØ„ΩΩ%+%soubtohkc%=2zZz+%ubtniah%=\?50741+666405Z+%ubttn}b%=>4?37?+%ubtsnjb%=63>>536>5?+%ubtqbu%=%q2777%z  
-[2017/07/07 09:37:16 276] ivw_local  464  speech_plus_setting  0  
-[2017/07/07 09:37:16 276] ivw_local  514  ËøéÂÆæÊú∫Âô®‰∫∫  0  5  
-[2017/07/07 09:37:16 276] ivw_local  546  d  
-[2017/07/07 09:37:16 276] ivw_local  575  now expires:  1499391436  nil  
-[2017/07/07 09:37:16 276] auth       252  read auth file failed! err=  11200  
-[2017/07/07 09:37:16 277] ivw_local  1183 SYS_MSG_REGCB  ivwMessageCallBack  func(880bb5e0) 
-[2017/07/07 09:37:16 277] ivw_local  988  IVW_LOCAL_MSG_SSB  
-[2017/07/07 09:37:16 278] ivw_local  754  ssb :  ivw_threshold=0:-20,sst=wakeup  
-[2017/07/07 09:37:16 278] ivw_local  404  app auth  
-[2017/07/07 09:37:16 278] auth       570  ivw  table(880bb220) nil  nil  appid = 595c9d5c,engine_start = ivw,ivw_res_path =fo|res/ivw/wakeupresource.jet, work_dir = .  
-[2017/07/07 09:37:16 278] auth       579  app  nil  nil  822a6c4876676d0b44c91fc3f264e0df  
-[2017/07/07 09:37:16 278] auth       636  ath rquest  {"authorize":[{"busin":"ivw","ver":"2.1.1"}]}  
-[2017/07/07 09:37:16 278] transport  658  paramkvsport is   nil  
-[2017/07/07 09:37:16 278] transport  666  ns_enable=  1  
-[2017/07/07 09:37:16 278] transport  710  url.full=  nil  
-[2017/07/07 09:37:16 278] transport  887  switch 80  
-[2017/07/07 09:37:16 278] transport  898  net type:  standard  
-[2017/07/07 09:37:16 278] transport  899  net operator:  def  
-[2017/07/07 09:37:16 278] transport  900  use proxy:  false  
-[2017/07/07 09:37:16 278] auth       691  not login!  
-[2017/07/07 09:37:16 278] auth       528  [session] send auth request  
-[2017/07/07 09:37:16 278] transport  1033 session.domain=  open.xf-yun.com  
-[2017/07/07 09:37:16 278] transport  1034 url.host=  open.xf-yun.com  
-[2017/07/07 09:37:16 278] transport  1068 NAMESERVER START  
-[2017/07/07 09:37:16 278] transport  1071 name =   ath  
-[2017/07/07 09:37:16 278] ns         629  ntt=  standard  
-[2017/07/07 09:37:16 278] transport  1074 trans,ns_inprog =  0  
-[2017/07/07 09:37:16 278] ns         585  name server start  
-[2017/07/07 09:37:16 278] ns         586  ns_sub =   ath  
-[2017/07/07 09:37:16 278] ns         588  ns_host=  open.xf-yun.com  
-[2017/07/07 09:37:16 278] ns         479  ns_host=  open.xf-yun.com  
-[2017/07/07 09:37:16 278] ns         558  GET /sip/resolver?srand=0707093711.32 HTTP/1.1
+[2017/07/10 16:27:01 586] ivw_local  1194 os_type is:  Linux  
+[2017/07/10 16:27:01 586] ivw_local  1203 ivw loaded!  
+[2017/07/10 16:27:01 586] ivw_local  1205 5.0.1016  
+[2017/07/10 16:27:01 586] ivw_local  1183 SYS_MSG_REGCB  msp_status_cb  func(6c06c680) 
+[2017/07/10 16:27:01 587] ivw_local  971  IVW_LOCAL_MSG_INIT  
+[2017/07/10 16:27:01 587] ivw_local  694  init :  appid = 595c9d5c,engine_start = ivw,ivw_res_path =fo|res/ivw/wakeupresource.jet, work_dir = .  
+[2017/07/10 16:27:01 587] ivw_local  704  ivw_res_path:  fo|res/ivw/wakeupresource.jet  
+[2017/07/10 16:27:01 587] ivw_local  655  lgi:  nil  nil  
+[2017/07/10 16:27:01 587] ivw_local  659  fo|res/ivw/wakeupresource.jet  1  
+[2017/07/10 16:27:01 587] ivw_local  452  err  0  
+[2017/07/10 16:27:01 587] ivw_local  453  res_ver  3  
+[2017/07/10 16:27:01 587] ivw_local  454  res_appid_md5    
+[2017/07/10 16:27:01 587] ivw_local  455  res_id    
+[2017/07/10 16:27:01 587] ivw_local  456  |%fsoniah%=|%fwwnc%=%2>2d>c2d%+%ubtnc%=%?55f1d3?01101c7e33d>6ad4a513b7ca%+%ubts~wb%=%c%z+%nqpphuc%=|%irj%=6+%phuct%=\|%nc%=7+%sbs%=%Ô∏â‚©π·õΩ‚ûØ„ΩΩ%+%soubtohkc%=2zZz+%ubtniah%=\?50741+666405Z+%ubttn}b%=>4?37?+%ubtsnjb%=63>>536>5?+%ubtqbu%=%q2777%z  
+[2017/07/10 16:27:01 587] ivw_local  464  speech_plus_setting  0  
+[2017/07/10 16:27:01 587] ivw_local  514  ËøéÂÆæÊú∫Âô®‰∫∫  0  5  
+[2017/07/10 16:27:01 587] ivw_local  546  d  
+[2017/07/10 16:27:01 587] ivw_local  575  now expires:  1499675221  nil  
+[2017/07/10 16:27:01 587] auth       74   ivw  app  nil  822a6c4876676d0b44c91fc3f264e0df  {"ivw":{"ver":"2","bus":{"expire_date":1502265937,"forbid":"0","nlimit":3},"res":{"md5":"321dfc19ca5b95a74d7eedec6326dc11","blist":{}}}}  
+[2017/07/10 16:27:01 587] auth       201  nil  
+[2017/07/10 16:27:01 587] auth       210  auth ivw_res_id  822a6c4876676d0b44c91fc3f264e0df  
+[2017/07/10 16:27:01 587] auth       224  auth get ivw_res_id  822a6c4876676d0b44c91fc3f264e0df  
+[2017/07/10 16:27:01 587] auth       312  nil  
+[2017/07/10 16:27:01 588] ivw_local  1183 SYS_MSG_REGCB  ivwMessageCallBack  func(6c0bcb10) 
+[2017/07/10 16:27:01 589] ivw_local  988  IVW_LOCAL_MSG_SSB  
+[2017/07/10 16:27:01 589] ivw_local  754  ssb :  ivw_threshold=0:-20,sst=wakeup  
+[2017/07/10 16:27:01 589] ivw_local  404  app auth  
+[2017/07/10 16:27:01 589] auth       570  ivw  table(6c0bc7a0) nil  nil  appid = 595c9d5c,engine_start = ivw,ivw_res_path =fo|res/ivw/wakeupresource.jet, work_dir = .  
+[2017/07/10 16:27:01 589] auth       579  app  nil  nil  822a6c4876676d0b44c91fc3f264e0df  
+[2017/07/10 16:27:01 589] auth       636  ath rquest  {"authorize":[{"ver":"2.1.1","busin":"ivw"}]}  
+[2017/07/10 16:27:01 589] transport  658  paramkvsport is   nil  
+[2017/07/10 16:27:01 589] transport  666  ns_enable=  1  
+[2017/07/10 16:27:01 589] transport  710  url.full=  nil  
+[2017/07/10 16:27:01 589] transport  887  switch 80  
+[2017/07/10 16:27:01 589] transport  898  net type:  standard  
+[2017/07/10 16:27:01 589] transport  899  net operator:  def  
+[2017/07/10 16:27:01 589] transport  900  use proxy:  false  
+[2017/07/10 16:27:01 589] auth       691  not login!  
+[2017/07/10 16:27:01 589] auth       528  [session] send auth request  
+[2017/07/10 16:27:01 589] transport  1033 session.domain=  open.xf-yun.com  
+[2017/07/10 16:27:01 589] transport  1034 url.host=  open.xf-yun.com  
+[2017/07/10 16:27:01 589] transport  1068 NAMESERVER START  
+[2017/07/10 16:27:01 589] transport  1071 name =   ath  
+[2017/07/10 16:27:01 589] ns         629  ntt=  standard  
+[2017/07/10 16:27:01 589] transport  1074 trans,ns_inprog =  0  
+[2017/07/10 16:27:01 589] ns         585  name server start  
+[2017/07/10 16:27:01 589] ns         586  ns_sub =   ath  
+[2017/07/10 16:27:01 589] ns         588  ns_host=  open.xf-yun.com  
+[2017/07/10 16:27:01 589] ns         479  ns_host=  open.xf-yun.com  
+[2017/07/10 16:27:01 589] ns         558  GET /sip/resolver?srand=0710162711.32 HTTP/1.1
 Host: hdns.openspeech.cn
 Connection: Keep-Alive
-X-Par: ver=1.3&appid=595c9d5c&operator=UNKNOW&nettype=STANDARD&cver=5.0.33.1158&svc=ath&host=open.xf-yun.com&sign=ccf8be410f5a0277e88d250d8fe77556
+X-Par: ver=1.3&appid=595c9d5c&operator=UNKNOW&nettype=STANDARD&cver=5.0.33.1158&svc=ath&host=open.xf-yun.com&sign=ce5be008f71e591b318c6cafd4c1b0ef
 User-Agent: iFLYCloud
 
   
-[2017/07/07 09:37:16 278] ns         559  net_type =  standard  
-[2017/07/07 09:37:16 278] ns         560  cmwapascmnet =  
-[2017/07/07 09:37:16 278] ns         561  uniwapasuninet =  
-[2017/07/07 09:37:16 278] ns         562  ctwapasctnet =  
-[2017/07/07 09:37:16 278] ns         579  host=  hdns.openspeech.cn  
-[2017/07/07 09:37:16 278] network    242  gethostbyname  hdns.openspeech.cn  ns1  
-[2017/07/07 09:37:16 278] auth       535  0  
-[2017/07/07 09:37:16 278] auth       498  lver:  nil  
-[2017/07/07 09:37:16 278] auth       503  cfg_ver:  nil  
-[2017/07/07 09:37:16 278] ivw_local  626  forbid_ivw =  nil  
-[2017/07/07 09:37:16 278] ivw_local  831  net_type:  standard  
-[2017/07/07 09:37:16 278] ivw_local  897  setParam keyword_id, threshold  0  -20  
-[2017/07/07 09:37:16 278] ivw_local  991  ssb ret:  0  
-[2017/07/07 09:37:16 279] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:16 279] ivw_local  912  append data  
-[2017/07/07 09:37:16 279] ivw_local  933  udata(880bb958) 6400  
-[2017/07/07 09:37:16 279] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:16 382] network    224  dns resp  0  ns1  
-[2017/07/07 09:37:16 383] ns         425  ns dns ok  117.121.56.5  
-[2017/07/07 09:37:16 383] ns         205  iplist not avail  
-[2017/07/07 09:37:16 383] ns         432  is_voicecloud_ip=  0  
-[2017/07/07 09:37:16 383] ns         439  ip_is_expected=  true  
-[2017/07/07 09:37:16 383] ns         447  ip_is_expected=  true  
-[2017/07/07 09:37:16 383] network    423  gethttpresp2  117.121.56.5  80  ns2  
-[2017/07/07 09:37:16 383] network    440  prot_type  tcp  
-[2017/07/07 09:37:16 423] network    328  connected  ns2  
-[2017/07/07 09:37:16 424] network    331  send ok  271  ns2  
-[2017/07/07 09:37:16 464] network    340  readable  ns2  
-[2017/07/07 09:37:16 464] network    344  HTTP/1.1 200 OK
-Date: Fri, 07 Jul 2017 01:37:16 GMT
+[2017/07/10 16:27:01 589] ns         559  net_type =  standard  
+[2017/07/10 16:27:01 589] ns         560  cmwapascmnet =  
+[2017/07/10 16:27:01 589] ns         561  uniwapasuninet =  
+[2017/07/10 16:27:01 589] ns         562  ctwapasctnet =  
+[2017/07/10 16:27:01 589] ns         579  host=  hdns.openspeech.cn  
+[2017/07/10 16:27:01 589] network    242  gethostbyname  hdns.openspeech.cn  ns1  
+[2017/07/10 16:27:01 589] auth       535  0  
+[2017/07/10 16:27:01 589] auth       498  lver:  nil  
+[2017/07/10 16:27:01 589] auth       503  cfg_ver:  nil  
+[2017/07/10 16:27:01 590] ivw_local  626  forbid_ivw =  0  
+[2017/07/10 16:27:01 590] ivw_local  831  net_type:  standard  
+[2017/07/10 16:27:01 590] ivw_local  897  setParam keyword_id, threshold  0  -20  
+[2017/07/10 16:27:01 590] ivw_local  991  ssb ret:  0  
+[2017/07/10 16:27:01 590] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:01 590] ivw_local  912  append data  
+[2017/07/10 16:27:01 590] ivw_local  933  udata(6c0bcf28) 6400  
+[2017/07/10 16:27:01 590] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:01 789] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:01 789] ivw_local  912  append data  
+[2017/07/10 16:27:01 789] ivw_local  933  udata(6c0bcf88) 6400  
+[2017/07/10 16:27:01 789] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:01 989] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:01 989] ivw_local  912  append data  
+[2017/07/10 16:27:01 990] ivw_local  933  udata(6c087cc8) 6400  
+[2017/07/10 16:27:01 990] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:02 190] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:02 190] ivw_local  912  append data  
+[2017/07/10 16:27:02 190] ivw_local  933  udata(6c0bcfd8) 6400  
+[2017/07/10 16:27:02 190] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:02 390] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:02 390] ivw_local  912  append data  
+[2017/07/10 16:27:02 390] ivw_local  933  udata(6c087c48) 6400  
+[2017/07/10 16:27:02 390] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:02 470] network    224  dns resp  0  ns1  
+[2017/07/10 16:27:02 470] ns         425  ns dns ok  117.121.56.5  
+[2017/07/10 16:27:02 470] ns         205  iplist not avail  
+[2017/07/10 16:27:02 470] ns         432  is_voicecloud_ip=  0  
+[2017/07/10 16:27:02 470] ns         439  ip_is_expected=  true  
+[2017/07/10 16:27:02 470] ns         447  ip_is_expected=  true  
+[2017/07/10 16:27:02 470] network    423  gethttpresp2  117.121.56.5  80  ns2  
+[2017/07/10 16:27:02 470] network    440  prot_type  tcp  
+[2017/07/10 16:27:02 511] network    328  connected  ns2  
+[2017/07/10 16:27:02 511] network    331  send ok  271  ns2  
+[2017/07/10 16:27:02 551] network    340  readable  ns2  
+[2017/07/10 16:27:02 552] network    344  HTTP/1.1 200 OK
+Date: Mon, 10 Jul 2017 08:27:02 GMT
 Content-Type: application/json
-Content-Length: 395
+Content-Length: 393
 Connection: keep-alive
 Server: iflytek/hdns
 
-{"dns":[{"host":"open.xf-yun.com","sip":[{"svc":"ath","ips":[{"ip":"59.107.24.11","port":980,"idc":"gz"},{"ip":"59.107.24.5","port":80,"idc":"gz"},{"ip":"59.107.24.11","port":980,"idc":"gz"}],"ttl":6000,"compel":0}]}],"default":[{"host":"open.xf-yun.com","sip":[{"svc":"ath","ips":[{"ip":"59.107.24.5","port":80,"idc":"gz"},{"ip":"59.107.24.11","port":980,"idc":"gz"}],"ttl":6000,"compel":0}]}]}  
-[2017/07/07 09:37:16 464] ns         256  name server http resp  table(8801eec0) 0  udata(8809be18) 
-[2017/07/07 09:37:16 464] ns         269  ns response OK for this time!  
-[2017/07/07 09:37:16 464] ns         280  from_server=  iflytek/hdns  
-[2017/07/07 09:37:16 465] ns         363  compel :  0  
-[2017/07/07 09:37:16 465] ns         374  tick()=  161522140  
-[2017/07/07 09:37:16 465] ns         378  tick()mod=  161522140  
-[2017/07/07 09:37:16 465] ns         379  ns_host=  open.xf-yun.com  
-[2017/07/07 09:37:16 465] ns         392  ns_host=  open.xf-yun.com  
-[2017/07/07 09:37:16 465] transport  1048 ns_ip =   59.107.24.11  
-[2017/07/07 09:37:16 465] transport  1049 ip_type =  assigned_athopen.xf-yun.com_host  
-[2017/07/07 09:37:16 465] transport  1266 [soc] connect   59.107.24.11  80  
-[2017/07/07 09:37:16 465] transport  1283 mspsoc.open,prot_type=  tcp  
-[2017/07/07 09:37:16 466] ns         658  no data in ns_q  
-[2017/07/07 09:37:16 466] ns         659  conti_ns,ns_inprog =   1  
-[2017/07/07 09:37:16 466] transport  142  [dns] [1] response 59.107.24.5  
-[2017/07/07 09:37:16 466] transport  152  59  107  24  5  
-[2017/07/07 09:37:16 466] transport  203  ipv =  v4  
-[2017/07/07 09:37:16 466] transport  207  dns ip is v4  
-[2017/07/07 09:37:16 466] transport  181  iplist not avail  
-[2017/07/07 09:37:16 466] transport  247  no iplist now  
-[2017/07/07 09:37:16 466] network    93   iptoenv ,  ipcache  open.xf-yun.com  def  59.107.24.5  
-[2017/07/07 09:37:16 478] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:16 478] ivw_local  912  append data  
-[2017/07/07 09:37:16 478] ivw_local  933  udata(880c14e8) 6400  
-[2017/07/07 09:37:16 478] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:16 506] transport  476  [soc] [1] connected  
-[2017/07/07 09:37:16 506] transport  1323 build http request.  
-[2017/07/07 09:37:16 507] transport  1423 POST /msp.do HTTP/1.1
+{"dns":[{"host":"open.xf-yun.com","sip":[{"svc":"ath","ips":[{"ip":"59.107.24.5","port":80,"idc":"gz"},{"ip":"59.107.24.11","port":980,"idc":"gz"},{"ip":"59.107.24.5","port":80,"idc":"gz"}],"ttl":6000,"compel":0}]}],"default":[{"host":"open.xf-yun.com","sip":[{"svc":"ath","ips":[{"ip":"59.107.24.11","port":980,"idc":"gz"},{"ip":"59.107.24.5","port":80,"idc":"gz"}],"ttl":6000,"compel":0}]}]}  
+[2017/07/10 16:27:02 552] ns         256  name server http resp  table(6c066500) 0  udata(6c09da68) 
+[2017/07/10 16:27:02 552] ns         269  ns response OK for this time!  
+[2017/07/10 16:27:02 552] ns         280  from_server=  iflytek/hdns  
+[2017/07/10 16:27:02 552] ns         363  compel :  0  
+[2017/07/10 16:27:02 552] ns         374  tick()=  25144988  
+[2017/07/10 16:27:02 552] ns         378  tick()mod=  25144988  
+[2017/07/10 16:27:02 552] ns         379  ns_host=  open.xf-yun.com  
+[2017/07/10 16:27:02 552] ns         392  ns_host=  open.xf-yun.com  
+[2017/07/10 16:27:02 552] transport  1048 ns_ip =   59.107.24.5  
+[2017/07/10 16:27:02 552] transport  1049 ip_type =  assigned_athopen.xf-yun.com_host  
+[2017/07/10 16:27:02 552] transport  1266 [soc] connect   59.107.24.5  80  
+[2017/07/10 16:27:02 552] transport  1283 mspsoc.open,prot_type=  tcp  
+[2017/07/10 16:27:02 553] ns         658  no data in ns_q  
+[2017/07/10 16:27:02 553] ns         659  conti_ns,ns_inprog =   1  
+[2017/07/10 16:27:02 553] transport  142  [dns] [1] response 117.121.21.146  
+[2017/07/10 16:27:02 553] transport  152  117  121  21  146  
+[2017/07/10 16:27:02 553] transport  203  ipv =  v4  
+[2017/07/10 16:27:02 553] transport  207  dns ip is v4  
+[2017/07/10 16:27:02 553] transport  181  iplist not avail  
+[2017/07/10 16:27:02 553] transport  247  no iplist now  
+[2017/07/10 16:27:02 553] network    93   iptoenv ,  ipcache  open.xf-yun.com  def  117.121.21.146  
+[2017/07/10 16:27:02 590] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:02 590] ivw_local  912  append data  
+[2017/07/10 16:27:02 590] ivw_local  933  udata(6c087dd8) 6400  
+[2017/07/10 16:27:02 590] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:02 593] transport  476  [soc] [1] connected  
+[2017/07/10 16:27:02 593] transport  1323 build http request.  
+[2017/07/10 16:27:02 593] transport  1423 POST /msp.do HTTP/1.1
 Host: open.xf-yun.com
 Content-Type: multipart/mixed;boundary=--
-Content-Length: 412
+Content-Length: 410
 User-Agent: iFLYCloud
 Cache-Control: no-cache
 Accept: */*
@@ -136,21 +156,21 @@ CE:gzip
 
 36
 xúÀN≠¥M2NI6NI362KNLL1J2I50O≤4O6J∂∞¥LIL  
-[2017/07/07 09:37:16 507] transport  1743 msg:release()  
-[2017/07/07 09:37:16 507] transport  506  [soc] [1] send ok  585  
-[2017/07/07 09:37:16 569] transport  518  [soc] [1] readable  
-[2017/07/07 09:37:16 570] transport  1696 HTTP/1.1 200 OK
+[2017/07/10 16:27:02 594] transport  1743 msg:release()  
+[2017/07/10 16:27:02 594] transport  506  [soc] [1] send ok  583  
+[2017/07/10 16:27:02 655] transport  518  [soc] [1] readable  
+[2017/07/10 16:27:02 655] transport  1696 HTTP/1.1 200 OK
 Content-Type: multipart/mixed;boundary=--
 Content-Length: 325
-X-Req-Date: 2017/07/07 09:37:16 535
+X-Req-Date: 2017/07/10 16:27:02 608
 Cache-Control: no-cache
 CL: 325
-X-Res-Date: 2017/07/07 09:37:16 556
+X-Res-Date: 2017/07/10 16:27:02 627
 
 ----
 Content-Length:83
 
-ver=MSSP+0%2E9&ret=0&key=09dALgSAsBTD1XZFNDDABTEOJgSUW/cHYozu/pVWOjRkW^GuPX5dBopg==
+ver=MSSP+0%2E9&ret=0&key=092YAtQeIPLs3Zt6og^FJL522xbo27x841Ni2JW/nQw6C^GuPX5dBopg==
 ----
 Content-Length:124
 Content-Type:binary/authinfo
@@ -160,101 +180,85 @@ Content-Encoding:gzip
 xúçA
 √ DÔ2kQ´¢ó)ÍˇÅI[Lö$wØÈ,gﬁc:‰¯ u‹ê`†Pﬁ€U˜%çÔîwF“n2∆ªhÉ¬¸lEh¿”Äã¨≤#ŸS°Ò_\…ç—Ms’±fW¢À·FÅô∏zk<U≠Ø£E∂°ˆs‰…U(¡
 ------  
-[2017/07/07 09:37:16 570] transport  1442 a_complete_httpmessage  200  
-[2017/07/07 09:37:16 570] transport  1552 is_update  true  
-[2017/07/07 09:37:16 570] transport  1556 port updated  80  
-[2017/07/07 09:37:16 570] transport  1558 switch  80  
-[2017/07/07 09:37:16 570] auth       347  [trans] [id = table: 0x7f6e880bbcb0;;;=0===;auth] readable  
-[2017/07/07 09:37:16 571] network    88   ipfromenv ,  ipcache  open.xf-yun.com  def  59.107.24.5  
-[2017/07/07 09:37:16 571] transport  973  cached ip is confirmed  
-[2017/07/07 09:37:16 571] transport  1300 [soc] disconnect   
-[2017/07/07 09:37:16 571] auth       383  auth_json=  udata(880bb678) 
-[2017/07/07 09:37:16 571] auth       384  tostring(auth_json)=  {"ivw":{"ver":"2","bus":{"expire_date":1502265937,"forbid":"0","nlimit":3},"res":{"md5":"321dfc19ca5b95a74d7eedec6326dc11","blist":{}}}}  
-[2017/07/07 09:37:16 571] auth       74   ivw  app  nil  822a6c4876676d0b44c91fc3f264e0df  {"ivw":{"ver":"2","bus":{"expire_date":1502265937,"forbid":"0","nlimit":3},"res":{"md5":"321dfc19ca5b95a74d7eedec6326dc11","blist":{}}}}  
-[2017/07/07 09:37:16 572] auth       201  nil  
-[2017/07/07 09:37:16 572] auth       210  auth ivw_res_id  822a6c4876676d0b44c91fc3f264e0df  
-[2017/07/07 09:37:16 572] auth       224  auth get ivw_res_id  822a6c4876676d0b44c91fc3f264e0df  
-[2017/07/07 09:37:16 572] auth       404  auth ok!  
-[2017/07/07 09:37:16 678] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:16 678] ivw_local  912  append data  
-[2017/07/07 09:37:16 678] ivw_local  933  udata(8803c648) 6400  
-[2017/07/07 09:37:16 678] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:16 879] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:16 879] ivw_local  912  append data  
-[2017/07/07 09:37:16 879] ivw_local  933  udata(880d03f8) 6400  
-[2017/07/07 09:37:16 879] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:17 079] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:17 079] ivw_local  912  append data  
-[2017/07/07 09:37:17 079] ivw_local  933  udata(88019218) 6400  
-[2017/07/07 09:37:17 079] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:17 279] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:17 279] ivw_local  912  append data  
-[2017/07/07 09:37:17 279] ivw_local  933  udata(8809c2f8) 6400  
-[2017/07/07 09:37:17 279] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:17 479] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:17 479] ivw_local  912  append data  
-[2017/07/07 09:37:17 479] ivw_local  933  udata(8809c3c8) 6400  
-[2017/07/07 09:37:17 479] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:17 680] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:17 680] ivw_local  912  append data  
-[2017/07/07 09:37:17 680] ivw_local  933  udata(880cf6d8) 6400  
-[2017/07/07 09:37:17 680] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:17 880] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:17 880] ivw_local  912  append data  
-[2017/07/07 09:37:17 880] ivw_local  933  udata(880d0f48) 6400  
-[2017/07/07 09:37:17 880] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:18 080] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:18 080] ivw_local  912  append data  
-[2017/07/07 09:37:18 080] ivw_local  933  udata(880d1018) 6400  
-[2017/07/07 09:37:18 080] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:18 280] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:18 280] ivw_local  912  append data  
-[2017/07/07 09:37:18 280] ivw_local  933  udata(880d10e8) 6400  
-[2017/07/07 09:37:18 280] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:18 481] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:18 481] ivw_local  912  append data  
-[2017/07/07 09:37:18 481] ivw_local  933  udata(880ce1d8) 6400  
-[2017/07/07 09:37:18 481] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:18 681] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:18 681] ivw_local  912  append data  
-[2017/07/07 09:37:18 681] ivw_local  933  udata(880ce2a8) 6400  
-[2017/07/07 09:37:18 681] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:18 881] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:18 881] ivw_local  912  append data  
-[2017/07/07 09:37:18 882] ivw_local  933  udata(880ce378) 6400  
-[2017/07/07 09:37:18 882] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:19 081] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:19 081] ivw_local  912  append data  
-[2017/07/07 09:37:19 081] ivw_local  933  udata(880ce448) 6400  
-[2017/07/07 09:37:19 081] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:19 282] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:19 282] ivw_local  912  append data  
-[2017/07/07 09:37:19 282] ivw_local  933  udata(880ce518) 6400  
-[2017/07/07 09:37:19 282] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:19 482] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:19 482] ivw_local  912  append data  
-[2017/07/07 09:37:19 482] ivw_local  933  udata(88091808) 6400  
-[2017/07/07 09:37:19 482] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:19 682] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:19 682] ivw_local  912  append data  
-[2017/07/07 09:37:19 682] ivw_local  933  udata(880918d8) 6400  
-[2017/07/07 09:37:19 682] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:19 883] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:19 883] ivw_local  912  append data  
-[2017/07/07 09:37:19 883] ivw_local  933  udata(880919a8) 6400  
-[2017/07/07 09:37:19 883] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:20 083] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:20 083] ivw_local  912  append data  
-[2017/07/07 09:37:20 083] ivw_local  933  udata(88091a78) 6400  
-[2017/07/07 09:37:20 083] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:20 283] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:20 283] ivw_local  912  append data  
-[2017/07/07 09:37:20 283] ivw_local  933  udata(88091b48) 6400  
-[2017/07/07 09:37:20 283] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:20 483] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
-[2017/07/07 09:37:20 483] ivw_local  912  append data  
-[2017/07/07 09:37:20 483] ivw_local  933  udata(88065748) 1262  
-[2017/07/07 09:37:20 484] ivw_local  1001 auw ret:  0  
-[2017/07/07 09:37:20 485] ivw_local  1004 IVW_LOCAL_MSG_END  
-[2017/07/07 09:37:20 485] ivw_local  953  sse  
-[2017/07/07 09:37:26 225] ivw_local  1207 SYS_MSG_SHUTDOWN  
+[2017/07/10 16:27:02 655] transport  1442 a_complete_httpmessage  200  
+[2017/07/10 16:27:02 655] transport  1552 is_update  true  
+[2017/07/10 16:27:02 655] transport  1556 port updated  80  
+[2017/07/10 16:27:02 655] transport  1558 switch  80  
+[2017/07/10 16:27:02 655] auth       347  [trans] [id = table: 0x7fc86c0bd1c0;;;=0===;auth] readable  
+[2017/07/10 16:27:02 655] network    88   ipfromenv ,  ipcache  open.xf-yun.com  def  117.121.21.146  
+[2017/07/10 16:27:02 655] transport  973  cached ip is confirmed  
+[2017/07/10 16:27:02 656] transport  1300 [soc] disconnect   
+[2017/07/10 16:27:02 656] auth       383  auth_json=  udata(6c065f98) 
+[2017/07/10 16:27:02 656] auth       384  tostring(auth_json)=  {"ivw":{"ver":"2","bus":{"expire_date":1502265937,"forbid":"0","nlimit":3},"res":{"md5":"321dfc19ca5b95a74d7eedec6326dc11","blist":{}}}}  
+[2017/07/10 16:27:02 656] auth       74   ivw  app  nil  822a6c4876676d0b44c91fc3f264e0df  {"ivw":{"ver":"2","bus":{"expire_date":1502265937,"forbid":"0","nlimit":3},"res":{"md5":"321dfc19ca5b95a74d7eedec6326dc11","blist":{}}}}  
+[2017/07/10 16:27:02 656] auth       201  nil  
+[2017/07/10 16:27:02 656] auth       210  auth ivw_res_id  822a6c4876676d0b44c91fc3f264e0df  
+[2017/07/10 16:27:02 656] auth       224  auth get ivw_res_id  822a6c4876676d0b44c91fc3f264e0df  
+[2017/07/10 16:27:02 656] auth       404  auth ok!  
+[2017/07/10 16:27:02 790] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:02 790] ivw_local  912  append data  
+[2017/07/10 16:27:02 790] ivw_local  933  udata(6c03d258) 6400  
+[2017/07/10 16:27:02 790] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:02 990] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:02 990] ivw_local  912  append data  
+[2017/07/10 16:27:02 990] ivw_local  933  udata(6c0d1598) 6400  
+[2017/07/10 16:27:02 990] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:03 191] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:03 191] ivw_local  912  append data  
+[2017/07/10 16:27:03 191] ivw_local  933  udata(6c0d13e8) 6400  
+[2017/07/10 16:27:03 191] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:03 391] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:03 391] ivw_local  912  append data  
+[2017/07/10 16:27:03 391] ivw_local  933  udata(6c09edd8) 6400  
+[2017/07/10 16:27:03 391] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:03 591] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:03 591] ivw_local  912  append data  
+[2017/07/10 16:27:03 591] ivw_local  933  udata(6c09ee28) 6400  
+[2017/07/10 16:27:03 591] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:03 791] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:03 791] ivw_local  912  append data  
+[2017/07/10 16:27:03 791] ivw_local  933  udata(6c087c48) 6400  
+[2017/07/10 16:27:03 791] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:03 991] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:03 991] ivw_local  912  append data  
+[2017/07/10 16:27:03 991] ivw_local  933  udata(6c09c208) 6400  
+[2017/07/10 16:27:03 992] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:04 192] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:04 192] ivw_local  912  append data  
+[2017/07/10 16:27:04 192] ivw_local  933  udata(6c087f68) 6400  
+[2017/07/10 16:27:04 192] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:04 392] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:04 392] ivw_local  912  append data  
+[2017/07/10 16:27:04 392] ivw_local  933  udata(6c088038) 6400  
+[2017/07/10 16:27:04 392] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:04 592] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:04 592] ivw_local  912  append data  
+[2017/07/10 16:27:04 592] ivw_local  933  udata(6c088108) 6400  
+[2017/07/10 16:27:04 592] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:04 792] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:04 792] ivw_local  912  append data  
+[2017/07/10 16:27:04 792] ivw_local  933  udata(6c005bb8) 6400  
+[2017/07/10 16:27:04 792] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:04 993] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:04 993] ivw_local  912  append data  
+[2017/07/10 16:27:04 993] ivw_local  933  udata(6c005c88) 6400  
+[2017/07/10 16:27:04 993] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:05 193] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:05 193] ivw_local  912  append data  
+[2017/07/10 16:27:05 193] ivw_local  933  udata(6c005d58) 6400  
+[2017/07/10 16:27:05 193] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:05 393] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:05 393] ivw_local  912  append data  
+[2017/07/10 16:27:05 393] ivw_local  933  udata(6c005e28) 6400  
+[2017/07/10 16:27:05 393] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:05 593] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:05 593] ivw_local  912  append data  
+[2017/07/10 16:27:05 593] ivw_local  933  udata(6c005ef8) 6400  
+[2017/07/10 16:27:05 593] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:05 794] ivw_local  994  IVW_LOCAL_MSG_APPENDDATA  
+[2017/07/10 16:27:05 794] ivw_local  912  append data  
+[2017/07/10 16:27:05 794] ivw_local  933  udata(6c0308f8) 1262  
+[2017/07/10 16:27:05 794] ivw_local  1001 auw ret:  0  
+[2017/07/10 16:27:05 794] ivw_local  1004 IVW_LOCAL_MSG_END  
+[2017/07/10 16:27:05 794] ivw_local  953  sse  
+[2017/07/10 16:27:09 488] ivw_local  1207 SYS_MSG_SHUTDOWN  

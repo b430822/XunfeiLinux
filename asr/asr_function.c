@@ -7,6 +7,7 @@
 #include "../include/qisr.h"
 #include "../include/msp_cmn.h"
 #include "../include/msp_errors.h"
+#include "awaken.h"
 
 #define SAMPLE_RATE_16K (16000)
 #define SAMPLE_RATE_8K (8000)
@@ -33,6 +34,7 @@ int update_lexicon(UserData *udata); //更新离线识别语法词典
 int run_asr(UserData *udata);		 //进行离线语法识别
 int init_asr(void);					 //进行初始化操作
 int start_asr(void);				 //开始识别
+extern start_awaken(void);			//唤醒
 
 const char *get_audio_file(void)
 {
@@ -283,7 +285,9 @@ run_exit:
 	QISRSessionEnd(session_id, NULL);
 	return errcode;
 }
-
+/*
+初始化命令识别
+*/
 int init_asr(void)
 {
 	const char *login_config = "appid = 595c9d5c"; //登录参数
@@ -317,7 +321,9 @@ exit:
 	getchar();
 	return -1;
 }
-
+/*
+开始识别
+*/
 int start_asr(void)
 {
 	int ret = 0;
@@ -356,6 +362,7 @@ exit:
 
 int main(int argc, char *argv[])
 {
+	start_awaken();
 	int ret = 0;
 	ret = init_asr();
 	if (ret == 0)
