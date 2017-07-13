@@ -25,7 +25,7 @@ $(BIN_TARGET) : $(OBJECTS)
 	$(CROSS_COMPILE)gcc $(CFLAGS) $^ -o $@ $(LDFLAGS) $(ALSA_LIB)
 
 %.o : %.c
-	$(CROSS_COMPILE)gcc -c $(CFLAGS) $< -o $@ $(ALSA_LIB)
+	$(CROSS_COMPILE)gcc -c $(CFLAGS) $< -o $@ 
 clean:
 	@rm -f *.o $(BIN_TARGET)
 

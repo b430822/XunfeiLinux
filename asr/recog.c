@@ -33,12 +33,13 @@ int cb_ivw_msg_proc(const char *sessionID, int msg, int param1, int param2,
                     const void *info, void *userData) {
   if (MSP_IVW_MSG_ERROR == msg) //唤醒出错消息
   {
-    printf("\n\nMSP_IVW_MSG_ERROR errCode = %d\n\n", param1);
+    fprintf(stderr,"\n\nMSP_IVW_MSG_ERROR errCode = %d\n\n", param1);
   } else if (MSP_IVW_MSG_WAKEUP == msg) //唤醒成功消息
   {
-    printf("\n\nMSP_IVW_MSG_WAKEUP result = %s\n\n", info);
+    fprintf(stderr,"\n\nMSP_IVW_MSG_WAKEUP result = %s\n\n", info);
+    is_awaken = 1;
   }else{
-      printf("\n\nMSP_IVW_MSG_WAKEUP result\n\n");
+    fprintf(stderr,"\n\nMSP_IVW_MSG_WAKEUP result\n\n");
   }
   return 0;
 }
@@ -67,7 +68,7 @@ void init_record() {
   /* One channels (stereo) */
   snd_pcm_hw_params_set_channels(handle, params, 1);
 
-  /* 16000 bits/second sampling rate (CD quality) */
+  /* 16000 bits/second sampling rate  */
   val = 16000;
   snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
 
@@ -134,11 +135,13 @@ void init_awaken() {
 */
 void start_awaken() {
   /*start record*/
-  long loops = 5000000 / val;
+  // long loops = 5000000 / val;
   fprintf(stderr, "start_awaken\n");
   buffer = (char *)malloc(size);
-  while (loops > 0) {
-    loops--;
+  int audio_stat = MSP_AUDIO_SAMPLE_FIRST;
+  while (!is_awaken) {
+    // loops--;
+      fprintf(stderr, "listening.. \n");
     rc = snd_pcm_readi(handle, buffer, frames);
     if (rc == -EPIPE) {
       /* EPIPE means overrun */
@@ -149,23 +152,22 @@ void start_awaken() {
     } else if (rc != (int)frames) {
       fprintf(stderr, "short read, read %d frames\n", rc);
     }
-    if (rc != size) {
-      fprintf(stderr, "short write: wrote %d bytes,size %d\n", rc,size);
-    }
-
     // rc = write(1, buffer, size);
-    err_code = QIVWAudioWrite(session_id, (const void *)&buffer, rc,
-                              MSP_AUDIO_SAMPLE_LAST);
+    err_code = QIVWAudioWrite(session_id,buffer, size,
+                              audio_stat);
     if (MSP_SUCCESS != err_code) {
       fprintf(stderr, "QIVWAudioWrite failed! error code:%d\n", err_code);
       snprintf(sse_hints, sizeof(sse_hints), "QIVWAudioWrite errorCode=%d",
                err_code);
       exit(1);
     }
+    audio_stat = MSP_AUDIO_SAMPLE_CONTINUE;
   }
-    fprintf(stderr, "usleep 3s \n");
-  usleep(12*1000*1000);
+    fprintf(stderr, " break listening ,awaken \n");
+  // usleep(3*1000*1000);
 }
+
+
 
 int main(int argc, char const *argv[]) {
   init_record();
