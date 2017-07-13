@@ -1,0 +1,2 @@
+init_record
+init_awakne 
