@@ -1,0 +1,7 @@
+#BNF+IAT 1.0 UTF-8;
+!grammar call;
+!slot <name>;
+!slot <operate>;
+!start <callStart>;
+<callStart>:[往][向]<operate>;
+<operate>:左!id(110)|右!id(111)|前进!id(112)|后退!id(113)|前!id(114)|后!id(115);

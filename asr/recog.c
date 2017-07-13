@@ -11,18 +11,18 @@
 void start(void (*recall)(void));
 void init_awaken(); //初始化唤醒参数
 void init_record(); //初始化录音参数
-
+void start_asr();
 // int cb_ivw_msg_proc(char *, int, int, int, void *, void *); //唤醒回调
 
 int rc;                        //录音缓存实际大小
 int size;                      //录音缓存容量
 char *buffer = NULL;           //录音缓存
 snd_pcm_t *handle = NULL;      //录音句柄
-int is_awaken = 0;             //唤醒跳出条件
+volatile int is_awaken = 0;    //唤醒跳出条件
 const char *session_id = NULL; //唤醒id
 snd_pcm_uframes_t frames = NULL;
 unsigned int val = 0;
-
+char *GRAMMAR_FILE = "command.bnf";
 int err_code = MSP_SUCCESS;
 char sse_hints[128];
 
@@ -31,19 +31,28 @@ char sse_hints[128];
 */
 int cb_ivw_msg_proc(const char *sessionID, int msg, int param1, int param2,
                     const void *info, void *userData) {
-  if (MSP_IVW_MSG_ERROR == msg) //唤醒出错消息
-  {
-    fprintf(stderr,"\n\nMSP_IVW_MSG_ERROR errCode = %d\n\n", param1);
-  } else if (MSP_IVW_MSG_WAKEUP == msg) //唤醒成功消息
-  {
-    fprintf(stderr,"\n\nMSP_IVW_MSG_WAKEUP result = %s\n\n", info);
+  switch (msg) {
+  case MSP_IVW_MSG_ISR_RESULT: //唤醒识别出错消息
+    fprintf(stderr, "\n\nMSP_IVW_MSG_ISR_RESULT result = %s\n\n", info);
     is_awaken = 1;
-  }else{
-    fprintf(stderr,"\n\nMSP_IVW_MSG_WAKEUP result\n\n");
+    break;
+  case MSP_IVW_MSG_ERROR: //唤醒出错消息
+    fprintf(stderr, "\n\nMSP_IVW_MSG_ERROR errCode = %d\n\n", param1);
+    break;
+  case MSP_IVW_MSG_WAKEUP: //唤醒成功消息
+    fprintf(stderr, "\n\nMSP_IVW_MSG_WAKEUP result = %s\n\n", info);
+    is_awaken = 1;
+    break;
+  default:
+  fprintf(stderr, "\n\nGet recall from awaken\n\n");
+  break;
+    return 0;
   }
-  return 0;
 }
 
+/*
+初始化监听参数
+*/
 void init_record() {
   fprintf(stderr, "init_record\n");
   snd_pcm_hw_params_t *params;
@@ -93,28 +102,26 @@ void init_record() {
 
 /*
 
-
+初始化唤醒参数
 */
 void init_awaken() {
 
   fprintf(stderr, "init_awakne \n");
   int ret = MSP_SUCCESS;
-  char *grammar_list = NULL;
-  char *session_begin_params = NULL;
-
+  // char *grammar_list = NULL;
   const char *lgi_param =
       "appid = 595c9d5c,engine_start = ivw,ivw_res_path "
       "=fo|res/ivw/wakeupresource.jet, work_dir = ."; //使用唤醒需要在此设置engine_start
                                                       //= ivw,ivw_res_path
                                                       //=fo|xxx/xx 启动唤醒引擎
-  const char *ssb_param = "ivw_threshold=0:-20,sst=wakeup";
+  const char *session_begin_params = "ivw_threshold=0:-20,sst=oneshot";
 
   ret = MSPLogin(NULL, NULL, lgi_param);
   if (MSP_SUCCESS != ret) {
     fprintf(stderr, "MSPLogin failed, error code: %d.\n", ret);
     exit(1); //登录失败，退出登录
   }
-  session_id = QIVWSessionBegin(grammar_list, session_begin_params, &err_code);
+  session_id = QIVWSessionBegin(GRAMMAR_FILE, session_begin_params, &err_code);
   if (err_code != MSP_SUCCESS) {
     fprintf(stderr, "QIVWSessionBegin failed! error code:%d\n", err_code);
     exit(1);
@@ -139,9 +146,9 @@ void start_awaken() {
   fprintf(stderr, "start_awaken\n");
   buffer = (char *)malloc(size);
   int audio_stat = MSP_AUDIO_SAMPLE_FIRST;
+    fprintf(stderr, "listening.. \n");
   while (!is_awaken) {
     // loops--;
-      fprintf(stderr, "listening.. \n");
     rc = snd_pcm_readi(handle, buffer, frames);
     if (rc == -EPIPE) {
       /* EPIPE means overrun */
@@ -153,8 +160,7 @@ void start_awaken() {
       fprintf(stderr, "short read, read %d frames\n", rc);
     }
     // rc = write(1, buffer, size);
-    err_code = QIVWAudioWrite(session_id,buffer, size,
-                              audio_stat);
+    err_code = QIVWAudioWrite(session_id, buffer, size, audio_stat);
     if (MSP_SUCCESS != err_code) {
       fprintf(stderr, "QIVWAudioWrite failed! error code:%d\n", err_code);
       snprintf(sse_hints, sizeof(sse_hints), "QIVWAudioWrite errorCode=%d",
@@ -163,15 +169,22 @@ void start_awaken() {
     }
     audio_stat = MSP_AUDIO_SAMPLE_CONTINUE;
   }
-    fprintf(stderr, " break listening ,awaken \n");
+  fprintf(stderr, "break listening ,awaken \n");
   // usleep(3*1000*1000);
+  // fprintf(stderr, "is awaken again ? y/n\n");
+  // char yes= "y";
+  // if(getchar() == yes){
+  //   is_awaken = 0;
+  //   start_awaken();
+  // }
 }
 
-
+void start_asr() { fprintf(stderr, "start_asr\n"); }
 
 int main(int argc, char const *argv[]) {
   init_record();
   init_awaken();
   start_awaken();
+  start_asr();
   return 0;
 }
