@@ -325,7 +325,7 @@ int run_asr(UserData *udata) {
   snprintf(asr_params, MAX_PARAMS_LEN - 1, "engine_type = local, \
 		asr_res_path = %s, sample_rate = %d, \
 		grm_build_path = %s, local_grammar = %s, \
-		result_type = xml, result_encoding = UTF-8, ",
+		result_type = xml, result_encoding = UTF-8, vad_eos = 800 ,",
            ASR_RES_PATH, SAMPLE_RATE_16K, GRM_BUILD_PATH, udata->grammar_id);
   session_id = QISRSessionBegin(NULL, asr_params, &errcode);
   fprintf(stderr, "%d\n", session_id);
@@ -348,18 +348,21 @@ int run_asr(UserData *udata) {
       exit(1);
     }
     aud_stat = MSP_AUDIO_SAMPLE_CONTINUE;
-    if (thread_asr_result_id == -1) {
-      thread_asr_result_id =
-          pthread_create(&get_asr_result_thread, NULL, get_asr_result, NULL);
-    }
     if (ep_status == MSP_EP_AFTER_SPEECH) {
+      if (thread_asr_result_id == -1) {
+        thread_asr_result_id =
+            pthread_create(&get_asr_result_thread, NULL, get_asr_result, NULL);
+      }
       break;
+    }
+    if(MSP_EP_TIMEOUT == ep_status || MSP_EP_ERROR == ep_status ||MSP_EP_MAX_SPEECH == ep_status ){
+      fprintf(stderr, "ep_status error %d\n", ep_status);
     }
   }
   // //主动点击音频结束
   QISRAudioWrite(session_id, (const void *)NULL, 0, MSP_AUDIO_SAMPLE_LAST,
                  &ep_status, &rec_status);
-  usleep(10 * 1000 * 1000);
+  usleep(5 * 1000 * 1000);
   QISRSessionEnd(session_id, NULL);
   return errcode;
 }
@@ -369,18 +372,20 @@ int run_asr(UserData *udata) {
 */
 void get_asr_result() {
   long count = 0;
-  int errcode = -1;
+  int errcode = 0;
   const char *rec_rslt = NULL;
   int rss_status = MSP_REC_STATUS_INCOMPLETE;
   while (!is_asr) {
     //获取识别结果
-    usleep(800 * 1000);
+    usleep(100 * 1000);
     if (MSP_REC_STATUS_COMPLETE != rss_status && MSP_SUCCESS == errcode) {
       rec_rslt = QISRGetResult(session_id, &rss_status, 0, &errcode);
     }
     fprintf(stderr, "\n===========%d==========%d====\n", count++, session_id);
-    if (NULL != rec_rslt)
+    if (NULL != rec_rslt){
       fprintf(stderr, "%s\n\n", rec_rslt);
+      rec_rslt = NULL;
+    }
     else
       fprintf(stderr, "没有识别结果！\n\n");
   }
