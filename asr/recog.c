@@ -56,6 +56,9 @@ char *GRAMMAR_FILE = "command.bnf";
 int err_code = MSP_SUCCESS;
 char sse_hints[128];
 
+pthread_mutex_t mutex; //识别结果获取线程
+pthread_cond_t cond;
+
 /*
 唤醒回调
 */
@@ -310,7 +313,10 @@ int init_asr(void) {
 int start_asr(void) {
   fprintf(stderr, "start_asr\n");
   int ret = 0;
-  ret = run_asr(&asr_data);
+  while (1) {
+    fprintf(stderr, "\nrun_asr is again\n");
+    ret = run_asr(&asr_data);
+  }
   MSPLogout();
   return ret;
 }
@@ -320,6 +326,8 @@ int run_asr(UserData *udata) {
   int ep_status = MSP_EP_LOOKING_FOR_SPEECH;
   int rec_status = MSP_REC_STATUS_INCOMPLETE;
   int errcode = -1;
+  const char *rec_rslt = NULL;
+  int rss_status = MSP_REC_STATUS_INCOMPLETE;
 
   //离线语法识别参数设置
   snprintf(asr_params, MAX_PARAMS_LEN - 1, "engine_type = local, \
@@ -336,12 +344,7 @@ int run_asr(UserData *udata) {
   int count = 0;
   while (!is_asr) {
     get_record();
-      fprintf(stderr, ">");
-    // write(1, buffer, size);
-    count++;
-    if (count > 500) {
-      break;
-    }
+    fprintf(stderr, ">");
     errcode = QISRAudioWrite(session_id, buffer, size, aud_stat, &ep_status,
                              &rec_status);
     if (MSP_SUCCESS != errcode) {
@@ -349,20 +352,30 @@ int run_asr(UserData *udata) {
     }
     aud_stat = MSP_AUDIO_SAMPLE_CONTINUE;
     if (ep_status == MSP_EP_AFTER_SPEECH) {
-      if (thread_asr_result_id == -1) {
-        thread_asr_result_id =
-            pthread_create(&get_asr_result_thread, NULL, get_asr_result, NULL);
-      }
       break;
     }
-    if(MSP_EP_TIMEOUT == ep_status || MSP_EP_ERROR == ep_status ||MSP_EP_MAX_SPEECH == ep_status ){
+    if (MSP_EP_TIMEOUT == ep_status || MSP_EP_ERROR == ep_status ||
+        MSP_EP_MAX_SPEECH == ep_status) {
       fprintf(stderr, "ep_status error %d\n", ep_status);
     }
   }
   // //主动点击音频结束
   QISRAudioWrite(session_id, (const void *)NULL, 0, MSP_AUDIO_SAMPLE_LAST,
                  &ep_status, &rec_status);
-  usleep(5 * 1000 * 1000);
+
+  //获取识别结果
+  while (MSP_REC_STATUS_COMPLETE != rss_status && MSP_SUCCESS == errcode) {
+    rec_rslt = QISRGetResult(session_id, &rss_status, 0, &errcode);
+    usleep(10 * 1000);
+  }
+  printf("\n识别结束：\n");
+  printf("=============================================================\n");
+  if (NULL != rec_rslt)
+    printf("%s\n", rec_rslt);
+  else
+    printf("没有识别结果！\n");
+  rec_rslt = NULL;
+  printf("=============================================================\n");
   QISRSessionEnd(session_id, NULL);
   return errcode;
 }
@@ -370,30 +383,33 @@ int run_asr(UserData *udata) {
 /*
 
 */
+int is_asr_again = 1;
 void get_asr_result() {
   long count = 0;
   int errcode = 0;
   const char *rec_rslt = NULL;
   int rss_status = MSP_REC_STATUS_INCOMPLETE;
-  while (!is_asr) {
+  while (is_asr_again) {
     //获取识别结果
-    usleep(100 * 1000);
-    if (MSP_REC_STATUS_COMPLETE != rss_status && MSP_SUCCESS == errcode) {
+    while (MSP_REC_STATUS_COMPLETE != rss_status && MSP_SUCCESS == errcode) {
       rec_rslt = QISRGetResult(session_id, &rss_status, 0, &errcode);
+      usleep(100 * 1000);
     }
     fprintf(stderr, "\n===========%d==========%d====\n", count++, session_id);
-    if (NULL != rec_rslt){
+    if (NULL != rec_rslt) {
       fprintf(stderr, "%s\n\n", rec_rslt);
       rec_rslt = NULL;
-    }
-    else
+    } else
       fprintf(stderr, "没有识别结果！\n\n");
+    pthread_cond_wait(&cond, &mutex);
   }
 }
 int main(int argc, char const *argv[]) {
   init_record();
   // init_awaken();
   // start_awaken();
+  pthread_mutex_init(&mutex, NULL);
+  pthread_cond_init(&cond, NULL);
   init_asr();
   start_asr();
   return 0;
