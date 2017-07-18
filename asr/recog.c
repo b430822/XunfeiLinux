@@ -11,7 +11,6 @@
 #include "../include/qivw.h"
 
 #define SAMPLE_RATE_16K (16000)
-#define SAMPLE_RATE_8K (8000)
 #define MAX_GRAMMARID_LEN (32)
 #define MAX_PARAMS_LEN (1024)
 
@@ -35,30 +34,28 @@ int init_asr(void);                  //进行初始化操作
 int start_asr(void);                 //开始识别
 
 void start(void (*recall)(void));
-void init_awaken();    //初始化唤醒参数
-void init_record();    //初始化录音参数
-void get_record();     //获取录音
-void get_asr_result(); //获取识别结果
+void init_awaken();         //初始化唤醒参数
+void init_record();         //初始化录音参数
+void get_record(char *);          //获取录音
+void do_asr_result(char *); //操作识别结果
 
-// int cb_ivw_msg_proc(char *, int, int, int, void *, void *); //唤醒回调
-pthread_t get_asr_result_thread;
-int thread_asr_result_id = -1;
-int rc;                     //录音缓存实际大小
 int size;                   //录音缓存容量
 char *buffer = NULL;        //录音缓存
 snd_pcm_t *handle = NULL;   //录音句柄
 volatile int is_awaken = 0; //唤醒跳出条件
-volatile int is_asr = 0;
 const char *session_id = NULL; //唤醒id
 snd_pcm_uframes_t frames = NULL;
-unsigned int val = 0;
+
 char *GRAMMAR_FILE = "command.bnf";
 int err_code = MSP_SUCCESS;
 char sse_hints[128];
 
-pthread_mutex_t mutex; //识别结果获取线程
-pthread_cond_t cond;
-
+pthread_mutex_t mutex;
+int timer_count;
+pthread_t timer_id;               //计时器线程id
+int is_stop_listening = 0;        //循环识别监听条件
+void *timer_task(void);           //计时器方法
+const int TIMER_COUNT_START = 10; //计时器10s
 /*
 唤醒回调
 */
@@ -66,37 +63,47 @@ int cb_ivw_msg_proc(const char *sessionID, int msg, int param1, int param2,
                     const void *info, void *userData) {
   switch (msg) {
   case MSP_IVW_MSG_ISR_RESULT: //唤醒识别出错消息
-    fprintf(stderr, "\n\nMSP_IVW_MSG_ISR_RESULT result = %s\n\n", info);
+    fprintf(stderr, "\nMSP_IVW_MSG_ISR_RESULT result = %s\n", info);
     is_awaken = 1;
+    start_timer();
     break;
   case MSP_IVW_MSG_ERROR: //唤醒出错消息
-    fprintf(stderr, "\n\nMSP_IVW_MSG_ERROR errCode = %d\n\n", param1);
+    fprintf(stderr, "\nMSP_IVW_MSG_ERROR errCode = %d\n", param1);
     break;
   case MSP_IVW_MSG_WAKEUP: //唤醒成功消息
-    fprintf(stderr, "\n\nMSP_IVW_MSG_WAKEUP result = %s\n\n", info);
+    fprintf(stderr, "\nMSP_IVW_MSG_WAKEUP result = %s\n", info);
     is_awaken = 1;
+    start_timer();
     break;
   default:
-    fprintf(stderr, "\n\nGet recall from awaken\n\n");
+    fprintf(stderr, "\nGet recall from awaken\n");
     break;
     return 0;
   }
 }
+/*
+开启计时器线程
+*/
+void start_timer() {
+  fprintf(stderr, "start_timer...\n");
+  is_stop_listening = 0;
+  timer_count = TIMER_COUNT_START;
+  pthread_create(&timer_id, NULL, timer_task, NULL);
+}
 
 /*
-初始化监听参数
+初始化话筒监听参数
 */
 void init_record() {
-  fprintf(stderr, "init_record\n");
+  fprintf(stderr, "init_record...\n");
   snd_pcm_hw_params_t *params;
   int dir = 0;
 
-  rc = snd_pcm_open(&handle, "default", SND_PCM_STREAM_CAPTURE, 0);
+  int rc = snd_pcm_open(&handle, "default", SND_PCM_STREAM_CAPTURE, 0);
   if (rc < 0) {
     fprintf(stderr, "unable to open pcm device :%s\n", snd_strerror(rc));
     exit(1);
   }
-  /* */
   /* Allocate a hardware parameters object. */
   snd_pcm_hw_params_alloca(&params);
   /* Fill it in with default values. */
@@ -111,7 +118,7 @@ void init_record() {
   snd_pcm_hw_params_set_channels(handle, params, 1);
 
   /* 16000 bits/second sampling rate  */
-  val = 16000;
+  unsigned int val = 16000;
   snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
 
   /* Set period size to 320 frames. */
@@ -128,9 +135,6 @@ void init_record() {
   /* Use a buffer large enough to hold one period */
   snd_pcm_hw_params_get_period_size(params, &frames, &dir);
   size = frames * 2; /* 2 bytes/sample, 1 channels */
-
-  // /* We want to loop for 5 seconds */
-  snd_pcm_hw_params_get_period_time(params, &val, &dir);
 }
 
 /*
@@ -138,7 +142,8 @@ void init_record() {
 初始化唤醒参数
 */
 void init_awaken() {
-
+  err_code = MSP_SUCCESS;
+  is_awaken = 0;
   fprintf(stderr, "init_awakne \n");
   int ret = MSP_SUCCESS;
   // char *grammar_list = NULL;
@@ -172,11 +177,11 @@ void init_awaken() {
 /*
 获取录音
 */
-void get_record() {
+void get_record(char *buffer) {
   if (buffer == NULL) {
     buffer = (char *)malloc(size);
   }
-  rc = snd_pcm_readi(handle, buffer, frames);
+  int rc = snd_pcm_readi(handle, buffer, frames);
   if (rc == -EPIPE) {
     /* EPIPE means overrun */
     fprintf(stderr, "overrun occurred\n");
@@ -193,15 +198,13 @@ void get_record() {
 */
 void start_awaken() {
   /*start record*/
-  // long loops = 5000000 / val;
+
   fprintf(stderr, "start_awaken\n");
   buffer = (char *)malloc(size);
   int audio_stat = MSP_AUDIO_SAMPLE_FIRST;
-  fprintf(stderr, "listening.. \n");
+  fprintf(stderr, "listening... \n");
   while (!is_awaken) {
-    // loops--;
-    get_record();
-    // rc = write(1, buffer, size);
+    get_record(buffer);
     err_code = QIVWAudioWrite(session_id, buffer, size, audio_stat);
     if (MSP_SUCCESS != err_code) {
       fprintf(stderr, "QIVWAudioWrite failed! error code:%d\n", err_code);
@@ -224,11 +227,10 @@ int build_grm_cb(int ecode, const char *info, void *udata) {
   }
 
   if (MSP_SUCCESS == ecode && NULL != info) {
-    printf("构建语法成功！ 语法ID:%s\n", info);
     if (NULL != grm_data)
       snprintf(grm_data->grammar_id, MAX_GRAMMARID_LEN - 1, info);
   } else
-    printf("构建语法失败！%d\n", ecode);
+    printf("build grammar failed!%d\n", ecode);
 
   return 0;
 }
@@ -242,7 +244,7 @@ int build_grammar(UserData *udata) {
 
   grm_file = fopen(GRAMMAR_FILE, "rb");
   if (NULL == grm_file) {
-    printf("打开\"%s\"文件失败！[%s]\n", GRAMMAR_FILE, strerror(errno));
+    printf("open\"%s\"file failed![%s]\n", GRAMMAR_FILE, strerror(errno));
     return -1;
   }
 
@@ -252,7 +254,7 @@ int build_grammar(UserData *udata) {
 
   grm_content = (char *)malloc(grm_cnt_len + 1);
   if (NULL == grm_content) {
-    printf("内存分配失败!\n");
+    printf("malloc failed!\n");
     fclose(grm_file);
     grm_file = NULL;
     return -1;
@@ -282,28 +284,28 @@ int init_asr(void) {
   const char *login_config = "appid = 595c9d5c"; //登录参数
   int ret = 0;
   char c;
-  fprintf(stderr, "init_asr\n");
+  fprintf(stderr, "init_asr...\n");
   ret = MSPLogin(
       NULL, NULL,
       login_config); //第一个参数为用户名，第二个参数为密码，传NULL即可，第三个参数是登录参数
   if (MSP_SUCCESS != ret) {
-    fprintf(stderr, "登录失败：%d\n", ret);
+    fprintf(stderr, "login faile：%d\n", ret);
     exit(1);
   }
 
   memset(&asr_data, 0, sizeof(UserData));
-  fprintf(stderr, "构建离线识别语法网络...\n");
+  //  fprintf(stderr, "构建离线识别语法网络...\n");
   ret = build_grammar(
       &asr_data); //第一次使用某语法进行识别，需要先构建语法网络，获取语法ID，之后使用此语法进行识别，无需再次构建
   if (MSP_SUCCESS != ret) {
-    fprintf(stderr, "构建语法调用失败！\n");
+    fprintf(stderr, "build grammar failed！\n");
     exit(1);
   }
   while (1 != asr_data.build_fini)
     usleep(300 * 1000);
   if (MSP_SUCCESS != asr_data.errcode)
     exit(1);
-  fprintf(stderr, "离线识别语法网络构建完成，开始识别...\n");
+  // fprintf(stderr, "离线识别语法网络构建完成，开始识别...\n");
   return ret;
 }
 
@@ -311,9 +313,9 @@ int init_asr(void) {
 开始识别
 */
 int start_asr(void) {
-  fprintf(stderr, "start_asr\n");
+  fprintf(stderr, "start_asr...\n");
   int ret = 0;
-  while (1) {
+  while (!is_stop_listening) {
     fprintf(stderr, "\nrun_asr is again\n");
     ret = run_asr(&asr_data);
   }
@@ -333,17 +335,16 @@ int run_asr(UserData *udata) {
   snprintf(asr_params, MAX_PARAMS_LEN - 1, "engine_type = local, \
 		asr_res_path = %s, sample_rate = %d, \
 		grm_build_path = %s, local_grammar = %s, \
-		result_type = xml, result_encoding = UTF-8, vad_eos = 800 ,",
+		result_type = xml, result_encoding = UTF-8, vad_eos = 100 ,asr_threshold = 30 ,asr_denoise = 1",
            ASR_RES_PATH, SAMPLE_RATE_16K, GRM_BUILD_PATH, udata->grammar_id);
   session_id = QISRSessionBegin(NULL, asr_params, &errcode);
-  fprintf(stderr, "%d\n", session_id);
   if (NULL == session_id) {
     exit(1);
   }
   int aud_stat = MSP_AUDIO_SAMPLE_FIRST;
   int count = 0;
-  while (!is_asr) {
-    get_record();
+  while (1) {
+    get_record(buffer);
     fprintf(stderr, ">");
     errcode = QISRAudioWrite(session_id, buffer, size, aud_stat, &ep_status,
                              &rec_status);
@@ -369,48 +370,41 @@ int run_asr(UserData *udata) {
     usleep(10 * 1000);
   }
   printf("\n识别结束：\n");
-  printf("=============================================================\n");
-  if (NULL != rec_rslt)
-    printf("%s\n", rec_rslt);
-  else
+  if (NULL != rec_rslt) {
+    do_asr_result(rec_rslt);
+  } else
     printf("没有识别结果！\n");
   rec_rslt = NULL;
-  printf("=============================================================\n");
   QISRSessionEnd(session_id, NULL);
   return errcode;
 }
 
-/*
-
-*/
-int is_asr_again = 1;
-void get_asr_result() {
-  long count = 0;
-  int errcode = 0;
-  const char *rec_rslt = NULL;
-  int rss_status = MSP_REC_STATUS_INCOMPLETE;
-  while (is_asr_again) {
-    //获取识别结果
-    while (MSP_REC_STATUS_COMPLETE != rss_status && MSP_SUCCESS == errcode) {
-      rec_rslt = QISRGetResult(session_id, &rss_status, 0, &errcode);
-      usleep(100 * 1000);
-    }
-    fprintf(stderr, "\n===========%d==========%d====\n", count++, session_id);
-    if (NULL != rec_rslt) {
-      fprintf(stderr, "%s\n\n", rec_rslt);
-      rec_rslt = NULL;
-    } else
-      fprintf(stderr, "没有识别结果！\n\n");
-    pthread_cond_wait(&cond, &mutex);
-  }
+void do_asr_result(char *rec_rslt) {
+  pthread_mutex_lock(&mutex);
+  timer_count = TIMER_COUNT_START;
+  pthread_mutex_unlock(&mutex);
+  printf("%s\n", rec_rslt);
 }
+
+void *timer_task(void) {
+  while (timer_count > 0) {
+    pthread_mutex_lock(&mutex);
+    timer_count--;
+    pthread_mutex_unlock(&mutex);
+    usleep(1000 * 1000);
+  }
+  printf("\ntimer_count = ：%d\n", timer_count);
+  is_stop_listening = 1;
+}
+
 int main(int argc, char const *argv[]) {
-  init_record();
-  // init_awaken();
-  // start_awaken();
   pthread_mutex_init(&mutex, NULL);
-  pthread_cond_init(&cond, NULL);
-  init_asr();
-  start_asr();
+  init_record();
+  while (1) { //循环唤醒
+    init_awaken();
+    start_awaken();
+    init_asr();
+    start_asr();
+  }
   return 0;
 }
