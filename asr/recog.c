@@ -36,15 +36,15 @@ int start_asr(void);                 //开始识别
 void start(void (*recall)(void));
 void init_awaken();         //初始化唤醒参数
 void init_record();         //初始化录音参数
-void get_record(char *);          //获取录音
+void get_record(char *);    //获取录音
 void do_asr_result(char *); //操作识别结果
 
-int size;                   //录音缓存容量
-char *buffer = NULL;        //录音缓存
-snd_pcm_t *handle = NULL;   //录音句柄
-volatile int is_awaken = 0; //唤醒跳出条件
+int size;                      //录音缓存容量
+char *buffer;           //录音缓存
+snd_pcm_t *handle;      //录音句柄
+volatile int is_awaken = 0;    //唤醒跳出条件
 const char *session_id = NULL; //唤醒id
-snd_pcm_uframes_t frames = NULL;
+snd_pcm_uframes_t frames  ;
 
 char *GRAMMAR_FILE = "command.bnf";
 int err_code = MSP_SUCCESS;
@@ -56,6 +56,7 @@ pthread_t timer_id;               //计时器线程id
 int is_stop_listening = 0;        //循环识别监听条件
 void *timer_task(void);           //计时器方法
 const int TIMER_COUNT_START = 10; //计时器10s
+int asr_break = 0;                //识别循环跳出标志
 /*
 唤醒回调
 */
@@ -87,6 +88,7 @@ int cb_ivw_msg_proc(const char *sessionID, int msg, int param1, int param2,
 void start_timer() {
   fprintf(stderr, "start_timer...\n");
   is_stop_listening = 0;
+  asr_break = 0;
   timer_count = TIMER_COUNT_START;
   pthread_create(&timer_id, NULL, timer_task, NULL);
 }
@@ -315,10 +317,11 @@ int init_asr(void) {
 int start_asr(void) {
   fprintf(stderr, "start_asr...\n");
   int ret = 0;
-  while (!is_stop_listening) {
+  do {
     fprintf(stderr, "\nrun_asr is again\n");
     ret = run_asr(&asr_data);
-  }
+  } while (!is_stop_listening);
+  asr_break = 1;
   MSPLogout();
   return ret;
 }
@@ -380,21 +383,27 @@ int run_asr(UserData *udata) {
 }
 
 void do_asr_result(char *rec_rslt) {
-  pthread_mutex_lock(&mutex);
+  pthread_mutex_lock(&mutex);//计时器重置
+  is_stop_listening = 0;
   timer_count = TIMER_COUNT_START;
   pthread_mutex_unlock(&mutex);
   printf("%s\n", rec_rslt);
 }
 
 void *timer_task(void) {
-  while (timer_count > 0) {
+  do {
+    usleep(1000 * 1000);
     pthread_mutex_lock(&mutex);
     timer_count--;
+    if (timer_count < 0) {
+      is_stop_listening = 1;                    //通知asr停止识别，但是没有让asr立即停止识别
+    }
     pthread_mutex_unlock(&mutex);
-    usleep(1000 * 1000);
-  }
-  printf("\ntimer_count = ：%d\n", timer_count);
-  is_stop_listening = 1;
+    if (timer_count < -5) {                     //n秒内，计时器未重置，强制跳出，结束计时器
+      break;
+    }
+    printf("\ntimer_count = ：%d\n", timer_count);
+  } while (!asr_break);                         //asr 跳出循环时，计时器结束循环
 }
 
 int main(int argc, char const *argv[]) {
