@@ -1,0 +1,4 @@
+*.o
+*.ldata
+*.dat
+*.data

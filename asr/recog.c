@@ -148,7 +148,7 @@ void init_record() {
 void init_awaken() {
   err_code = MSP_SUCCESS;
   is_awaken = 0;
-  fprintf(stderr, "init_awakne \n");
+  fprintf(stderr, "\ninit_awakne \n");
   int ret = MSP_SUCCESS;
   // char *grammar_list = NULL;
   const char *lgi_param =
