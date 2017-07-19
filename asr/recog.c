@@ -26,25 +26,27 @@ typedef struct _UserData {
 } UserData;
 UserData asr_data;
 
-// const char *get_audio_file(void);	//选择进行离线语法识别的语音文件
 int build_grammar(UserData *udata);  //构建离线识别语法网络
 int update_lexicon(UserData *udata); //更新离线识别语法词典
 int run_asr(UserData *udata);        //进行离线语法识别
 int init_asr(void);                  //进行初始化操作
 int start_asr(void);                 //开始识别
+int start_recog_thread(void);
+int start_recog(void);
 
-void start(void (*recall)(void));
+char *asr_result_key = "<operate id=\""; //识别结果关键字匹配
+
 void init_awaken();         //初始化唤醒参数
 void init_record();         //初始化录音参数
 void get_record(char *);    //获取录音
 void do_asr_result(char *); //操作识别结果
 
 int size;                      //录音缓存容量
-char *buffer;           //录音缓存
-snd_pcm_t *handle;      //录音句柄
+char *buffer;                  //录音缓存
+snd_pcm_t *handle;             //录音句柄
 volatile int is_awaken = 0;    //唤醒跳出条件
 const char *session_id = NULL; //唤醒id
-snd_pcm_uframes_t frames  ;
+snd_pcm_uframes_t frames;
 
 char *GRAMMAR_FILE = "command.bnf";
 int err_code = MSP_SUCCESS;
@@ -154,7 +156,7 @@ void init_awaken() {
       "=fo|res/ivw/wakeupresource.jet, work_dir = ."; //使用唤醒需要在此设置engine_start
                                                       //= ivw,ivw_res_path
                                                       //=fo|xxx/xx 启动唤醒引擎
-  const char *session_begin_params = "ivw_threshold=0:-20,sst=oneshot";
+  const char *session_begin_params = "ivw_threshold=0:-20,sst=wakeup";
 
   ret = MSPLogin(NULL, NULL, lgi_param);
   if (MSP_SUCCESS != ret) {
@@ -296,7 +298,6 @@ int init_asr(void) {
   }
 
   memset(&asr_data, 0, sizeof(UserData));
-  //  fprintf(stderr, "构建离线识别语法网络...\n");
   ret = build_grammar(
       &asr_data); //第一次使用某语法进行识别，需要先构建语法网络，获取语法ID，之后使用此语法进行识别，无需再次构建
   if (MSP_SUCCESS != ret) {
@@ -307,7 +308,6 @@ int init_asr(void) {
     usleep(300 * 1000);
   if (MSP_SUCCESS != asr_data.errcode)
     exit(1);
-  // fprintf(stderr, "离线识别语法网络构建完成，开始识别...\n");
   return ret;
 }
 
@@ -318,7 +318,7 @@ int start_asr(void) {
   fprintf(stderr, "start_asr...\n");
   int ret = 0;
   do {
-    fprintf(stderr, "\nrun_asr is again\n");
+    // fprintf(stderr, "\nrun_asr is again\n");
     ret = run_asr(&asr_data);
   } while (!is_stop_listening);
   asr_break = 1;
@@ -372,22 +372,37 @@ int run_asr(UserData *udata) {
     rec_rslt = QISRGetResult(session_id, &rss_status, 0, &errcode);
     usleep(10 * 1000);
   }
-  printf("\n识别结束：\n");
   if (NULL != rec_rslt) {
     do_asr_result(rec_rslt);
-  } else
-    printf("没有识别结果！\n");
-  rec_rslt = NULL;
+  } else{
+
+  }
   QISRSessionEnd(session_id, NULL);
   return errcode;
 }
 
 void do_asr_result(char *rec_rslt) {
-  pthread_mutex_lock(&mutex);//计时器重置
+  pthread_mutex_lock(&mutex); //计时器重置
   is_stop_listening = 0;
   timer_count = TIMER_COUNT_START;
   pthread_mutex_unlock(&mutex);
-  printf("%s\n", rec_rslt);
+  //获取结果id
+  rec_rslt = strstr(rec_rslt, asr_result_key);
+  if (rec_rslt != NULL) {
+    rec_rslt += strlen(asr_result_key);
+    int count = 0;
+    while (isdigit(*(rec_rslt + count))) {
+      count++;
+    }
+    char id[count + 1];
+    char *str = id;
+    strncpy(str, rec_rslt, count);
+    id[count] = '\0';
+    printf("\ncommand id = %s\n", id);
+  } else {
+    fprintf(stderr, "\nstrlen asr_result_key NULL\n");
+  }
+  rec_rslt = NULL;
 }
 
 void *timer_task(void) {
@@ -396,17 +411,17 @@ void *timer_task(void) {
     pthread_mutex_lock(&mutex);
     timer_count--;
     if (timer_count < 0) {
-      is_stop_listening = 1;                    //通知asr停止识别，但是没有让asr立即停止识别
+      is_stop_listening = 1; //通知asr停止识别，但是没有让asr立即停止识别
     }
     pthread_mutex_unlock(&mutex);
-    if (timer_count < -5) {                     //n秒内，计时器未重置，强制跳出，结束计时器
+    if (timer_count < -5) { // n秒内，计时器未重置，强制跳出，结束计时器
       break;
     }
-    printf("\ntimer_count = ：%d\n", timer_count);
-  } while (!asr_break);                         //asr 跳出循环时，计时器结束循环
+    // printf("\ntimer_count = ：%d\n", timer_count);
+  } while (!asr_break); // asr 跳出循环时，计时器结束循环
 }
 
-int main(int argc, char const *argv[]) {
+int start_recog() {
   pthread_mutex_init(&mutex, NULL);
   init_record();
   while (1) { //循环唤醒
@@ -414,6 +429,19 @@ int main(int argc, char const *argv[]) {
     start_awaken();
     init_asr();
     start_asr();
+  }
+  return 0;
+}
+
+int start_recog_thread() {
+  pthread_t recog_thread;
+  return pthread_create(&recog_thread, NULL, start_recog, NULL);
+}
+
+int main(int argc, char const *argv[]) {
+  start_recog_thread();
+  while (1) {
+    usleep(30 * 1000 * 1000);
   }
   return 0;
 }
