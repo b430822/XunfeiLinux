@@ -3,5 +3,5 @@
 !slot <name>;
 !slot <operate>;
 !start <callStart>;
-<callStart>:[往][向]<operate>;
-<operate>:左!id(110)|右!id(111)|前进!id(112)|后退!id(113)|前!id(114)|后!id(115);
+<callStart>:[迎宾机器人][往][向][去]<operate>;
+<operate>:左!id(110)|右!id(111)|前进!id(112)|后退!id(113)|前!id(112)|后!id(113)|开机!id(114)|回充电站!id(115)|初始位置!id(116)|跟人行走!id(117)|电梯口!id(118);

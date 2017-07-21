@@ -33,6 +33,8 @@ int init_asr(void);                  //进行初始化操作
 int start_asr(void);                 //开始识别
 int start_recog_thread(void);
 int start_recog(void);
+void start_recog_progress(); //开启识别进程
+void send_msg(int num);      //发送识别信号
 
 char *asr_result_key = "<operate id=\""; //识别结果关键字匹配
 
@@ -55,13 +57,17 @@ char sse_hints[128];
 pthread_mutex_t mutex;
 int timer_count;
 pthread_t timer_id;               //计时器线程id
-int is_stop_listening = 0;        //循环识别监听条件
+int is_stop_asr = 0;              //循环识别监听条件
 void *timer_task(void);           //计时器方法
 const int TIMER_COUNT_START = 10; //计时器10s
 int asr_break = 0;                //识别循环跳出标志
+
+//TODO 是否取消监听
+int is_stop_listening = 0; //取消运行，阻塞；
+int is_stop();
 /*
-唤醒回调
-*/
+   唤醒回调
+   */
 int cb_ivw_msg_proc(const char *sessionID, int msg, int param1, int param2,
                     const void *info, void *userData) {
   switch (msg) {
@@ -85,19 +91,19 @@ int cb_ivw_msg_proc(const char *sessionID, int msg, int param1, int param2,
   }
 }
 /*
-开启计时器线程
-*/
+   开启计时器线程
+   */
 void start_timer() {
   fprintf(stderr, "start_timer...\n");
-  is_stop_listening = 0;
+  is_stop_asr = 0;
   asr_break = 0;
   timer_count = TIMER_COUNT_START;
   pthread_create(&timer_id, NULL, timer_task, NULL);
 }
 
 /*
-初始化话筒监听参数
-*/
+   初始化话筒监听参数
+   */
 void init_record() {
   fprintf(stderr, "init_record...\n");
   snd_pcm_hw_params_t *params;
@@ -143,8 +149,8 @@ void init_record() {
 
 /*
 
-初始化唤醒参数
-*/
+   初始化唤醒参数
+   */
 void init_awaken() {
   err_code = MSP_SUCCESS;
   is_awaken = 0;
@@ -154,8 +160,8 @@ void init_awaken() {
   const char *lgi_param =
       "appid = 595c9d5c,engine_start = ivw,ivw_res_path "
       "=fo|res/ivw/wakeupresource.jet, work_dir = ."; //使用唤醒需要在此设置engine_start
-                                                      //= ivw,ivw_res_path
-                                                      //=fo|xxx/xx 启动唤醒引擎
+  //= ivw,ivw_res_path
+  //=fo|xxx/xx 启动唤醒引擎
   const char *session_begin_params = "ivw_threshold=0:-20,sst=wakeup";
 
   ret = MSPLogin(NULL, NULL, lgi_param);
@@ -179,8 +185,8 @@ void init_awaken() {
 }
 
 /*
-获取录音
-*/
+   获取录音
+   */
 void get_record(char *buffer) {
   if (buffer == NULL) {
     buffer = (char *)malloc(size);
@@ -217,6 +223,8 @@ void start_awaken() {
       exit(1);
     }
     audio_stat = MSP_AUDIO_SAMPLE_CONTINUE;
+    if (is_stop())
+      break;
   }
   fprintf(stderr, "break listening ,awaken \n");
   MSPLogout();
@@ -269,8 +277,8 @@ int build_grammar(UserData *udata) {
   grm_file = NULL;
 
   snprintf(grm_build_params, MAX_PARAMS_LEN - 1, "engine_type = local, \
-		asr_res_path = %s, sample_rate = %d, \
-		grm_build_path = %s, ",
+			asr_res_path = %s, sample_rate = %d, \
+			grm_build_path = %s, ",
            ASR_RES_PATH, SAMPLE_RATE_16K, GRM_BUILD_PATH);
   ret = QISRBuildGrammar("bnf", grm_content, grm_cnt_len, grm_build_params,
                          build_grm_cb, udata);
@@ -282,8 +290,8 @@ int build_grammar(UserData *udata) {
 }
 
 /*
-初始化命令识别
-*/
+   初始化命令识别
+   */
 int init_asr(void) {
   const char *login_config = "appid = 595c9d5c"; //登录参数
   int ret = 0;
@@ -312,15 +320,14 @@ int init_asr(void) {
 }
 
 /*
-开始识别
-*/
+   开始识别
+   */
 int start_asr(void) {
   fprintf(stderr, "start_asr...\n");
   int ret = 0;
   do {
-    // fprintf(stderr, "\nrun_asr is again\n");
     ret = run_asr(&asr_data);
-  } while (!is_stop_listening);
+  } while (!is_stop_asr && !is_stop_listening);
   asr_break = 1;
   MSPLogout();
   return ret;
@@ -336,9 +343,9 @@ int run_asr(UserData *udata) {
 
   //离线语法识别参数设置
   snprintf(asr_params, MAX_PARAMS_LEN - 1, "engine_type = local, \
-		asr_res_path = %s, sample_rate = %d, \
-		grm_build_path = %s, local_grammar = %s, \
-		result_type = xml, result_encoding = UTF-8, vad_eos = 100 ,asr_threshold = 30 ,asr_denoise = 1",
+			asr_res_path = %s, sample_rate = %d, \
+			grm_build_path = %s, local_grammar = %s, \
+			result_type = xml, result_encoding = UTF-8, vad_eos = 100 ,asr_threshold = 30 ,asr_denoise = 1",
            ASR_RES_PATH, SAMPLE_RATE_16K, GRM_BUILD_PATH, udata->grammar_id);
   session_id = QISRSessionBegin(NULL, asr_params, &errcode);
   if (NULL == session_id) {
@@ -362,6 +369,9 @@ int run_asr(UserData *udata) {
         MSP_EP_MAX_SPEECH == ep_status) {
       fprintf(stderr, "ep_status error %d\n", ep_status);
     }
+    if (is_stop()) {
+      goto end;
+    }
   }
   // //主动点击音频结束
   QISRAudioWrite(session_id, (const void *)NULL, 0, MSP_AUDIO_SAMPLE_LAST,
@@ -374,16 +384,15 @@ int run_asr(UserData *udata) {
   }
   if (NULL != rec_rslt) {
     do_asr_result(rec_rslt);
-  } else{
-
   }
+end:
   QISRSessionEnd(session_id, NULL);
   return errcode;
 }
 
 void do_asr_result(char *rec_rslt) {
   pthread_mutex_lock(&mutex); //计时器重置
-  is_stop_listening = 0;
+  is_stop_asr = 0;
   timer_count = TIMER_COUNT_START;
   pthread_mutex_unlock(&mutex);
   //获取结果id
@@ -398,7 +407,8 @@ void do_asr_result(char *rec_rslt) {
     char *str = id;
     strncpy(str, rec_rslt, count);
     id[count] = '\0';
-    printf("\ncommand id = %s\n", id);
+    int num = atoi(id);
+    send_msg(num);
   } else {
     fprintf(stderr, "\nstrlen asr_result_key NULL\n");
   }
@@ -411,37 +421,98 @@ void *timer_task(void) {
     pthread_mutex_lock(&mutex);
     timer_count--;
     if (timer_count < 0) {
-      is_stop_listening = 1; //通知asr停止识别，但是没有让asr立即停止识别
+      is_stop_asr = 1; //通知asr停止识别，但是没有让asr立即停止识别
     }
     pthread_mutex_unlock(&mutex);
     if (timer_count < -5) { // n秒内，计时器未重置，强制跳出，结束计时器
       break;
     }
-    // printf("\ntimer_count = ：%d\n", timer_count);
   } while (!asr_break); // asr 跳出循环时，计时器结束循环
+
+}
+/*
+释放话筒监听
+*/
+void free_record() {
+  if (buffer != NULL) {
+    snd_pcm_drain(handle);
+    snd_pcm_close(handle);
+    free(buffer);
+    buffer = NULL;
+  }
 }
 
+/*
+检查是否停止
+*/
+int is_stop() {
+  if (is_stop_listening) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+/*
+开始执行语音识别
+*/
 int start_recog() {
   pthread_mutex_init(&mutex, NULL);
-  init_record();
-  while (1) { //循环唤醒
-    init_awaken();
-    start_awaken();
-    init_asr();
-    start_asr();
-  }
-  return 0;
-}
-
-int start_recog_thread() {
-  pthread_t recog_thread;
-  return pthread_create(&recog_thread, NULL, start_recog, NULL);
-}
-
-int main(int argc, char const *argv[]) {
-  start_recog_thread();
   while (1) {
-    usleep(30 * 1000 * 1000);
+    if (is_stop()) {
+			//TODO 停止时空循环
+      usleep(100 * 1000);
+      continue;
+    }
+    fprintf(stderr, "Start\n");
+    init_record();
+    while (!is_stop()) { //识别结束后，重新从唤醒开始
+      init_awaken();
+      start_awaken();
+      init_asr();
+      start_asr();
+    }
+    free_record();
+    fprintf(stderr, "End\n");
   }
-  return 0;
 }
+
+  /*
+  发送最终数据调用方法
+  */
+	//TODO
+  void send_msg(int num) { printf("\ncommand id = %d\n", num); }
+
+  /*
+     开启识别线程
+     */
+  int start_recog_thread() {
+    pthread_t recog_thread;
+    return pthread_create(&recog_thread, NULL, start_recog, NULL);
+  }
+  // /*
+  //    开启识别进程
+  //    */
+  // void start_recog_progress() {
+  //   int pid = fork();
+  //   if (pid < 0) {
+  //     fprintf(stderr, "fork failed :%s\n", strerror(errno));
+  //     exit(1);
+  //   }
+  //   if (pid == 0) {
+  //     start_recog();
+  //   }
+  // }
+
+  int main(int argc, char const *argv[]) {
+    start_recog_thread();
+    while (1) {
+			usleep(30* 1000 *1000);
+
+			//停止测试代码
+			// usleep(3*1000*1000);
+			// is_stop_listening = 1;
+			// usleep(4*1000*1000);
+			// is_stop_listening = 0;
+    }
+    return 0;
+  }
